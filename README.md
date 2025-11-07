@@ -1,4 +1,4 @@
-# Go Todo REST API
+# Go Todo API (Vertical Layer Architecture)
 
 A simple RESTful API for a Todo application built with Go, Fiber, and GORM (MySQL). This project implements user authentication (JWT), task management, and follows clean architecture principles (repository, service, controller).
 
@@ -19,21 +19,26 @@ A simple RESTful API for a Todo application built with Go, Fiber, and GORM (MySQ
 - [MySQL](https://www.mysql.com/) (database)
 - JWT for authentication
 
-## Project Structure
+## Struktur Proyek
 
 ```
 internal/
-  controllers/   # HTTP handlers
-  services/      # Business logic
-  repositories/  # Database access
-  models/        # Data models
-  middlewares/   # Fiber middlewares (auth, error)
-  dto/           # Request/response DTOs
-  routes/        # Route definitions
-  database/      # DB connection & migration
-config/          # App configuration
-cmd/             # Main entrypoint
+  auth/         # Modul autentikasi (model, repository, service, controller, route)
+  user/         # Modul user/profile (model, repository, service, controller, route)
+  task/         # Modul task/todo (model, repository, service, controller, route)
+  middlewares/  # Middleware global (auth, error handler)
+  database/     # Koneksi & migrasi database
+  routes/       # Setup routing utama (vertical_routes.go)
+config/         # Konfigurasi aplikasi (env, dsb)
+cmd/            # Entry point aplikasi (main.go)
 ```
+
+## Arsitektur
+
+- **Vertical Layer**: Setiap fitur (auth, user, task) punya folder sendiri berisi model, repository, service, controller, dan route.
+- **Tidak ada folder controllers/services/repositories global** (horizontal layer sudah tidak dipakai).
+- **Middleware** hanya untuk validasi token dan error handling.
+- **Generate Token** sekarang ada di `internal/auth/service.go`.
 
 ## Getting Started
 
@@ -49,26 +54,14 @@ cmd/             # Main entrypoint
    git clone <repo-url>
    cd go-todo
    ```
-2. Copy `.env` and set your database credentials:
-   ```env
-   DB_HOST=localhost
-   DB_PORT=3306
-   DB_USER=root
-   DB_PASSWORD=yourpassword
-   DB_NAME=your_db_name
-   JWT_SECRET=your_jwt_secret
-   JWT_EXPIRES_IN=168h
-   PORT=5000
-   NODE_ENV=development
-   CORS_ORIGIN=http://localhost:3000
-   ```
+2. **Copy `.env.example` ke `.env`** dan sesuaikan konfigurasi database.
 3. Install dependencies:
    ```bash
    go mod tidy
    ```
-4. Run the app:
+4. **Jalankan migrasi & server**:
    ```bash
-   go run cmd/main.go
+   go run ./cmd/main.go
    ```
 
 ## API Endpoints
@@ -80,17 +73,21 @@ cmd/             # Main entrypoint
 
 ### User
 
-- `GET /api/users/` — Get current user profile (JWT required)
-- `PUT /api/users/:id` — Update user profile (JWT required)
+- `GET /api/users/profile` — Lihat profil user (auth)
+- `PUT /api/users/:id` — Update profil user (auth)
 
 ### Tasks
 
-- `POST /api/tasks/` — Create new task (JWT required)
-- `GET /api/tasks/` — List all tasks for current user (JWT required)
-- `GET /api/tasks/:id` — Get task by ID (JWT required)
-- `PUT /api/tasks/:id` — Update task (JWT required)
-- `DELETE /api/tasks/:id` — Delete task (JWT required)
+- `POST /api/tasks` — Buat task (auth)
+- `GET /api/tasks` — List task user (auth)
+- `GET /api/tasks/:id` — Detail task (auth)
+- `PUT /api/tasks/:id` — Update task (auth)
+- `DELETE /api/tasks/:id` — Hapus task (auth)
 
 ## License
 
 MIT
+
+---
+
+**Happy coding!** 🚀
