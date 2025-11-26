@@ -95,7 +95,7 @@ MIT
 
 ---
 
-_Backend API repo: [task-api](https://github.com/bertoale/task-client)_
+_Backend API repo: [task-client](https://github.com/bertoale/task-client)_
 
 _This project is part of the GO-TASK fullstack app._
 **Happy coding!** 🚀
