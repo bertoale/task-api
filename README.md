@@ -257,5 +257,3 @@ go test ./...
 MIT
 
 ---
-
-Silakan sesuaikan bagian deployment/testing jika ada kebutuhan khusus. README ini sudah siap untuk project backend profesional!
