@@ -16,6 +16,15 @@ func NewController(service Service) *Controller {
 	return &Controller{service: service}
 }
 
+// @Summary Create new task
+// @Description Buat task baru untuk user
+// @Tags Tasks
+// @Accept json
+// @Produce json
+// @Param data body CreateRequest true "Task data"
+// @Success 201 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/tasks [post]
 func (ctrl *Controller) CreateTask(c *fiber.Ctx) error {
 	user := c.Locals("user").(*auth.User)
 
@@ -34,6 +43,13 @@ func (ctrl *Controller) CreateTask(c *fiber.Ctx) error {
 	})
 }
 
+// @Summary List user tasks
+// @Description Get all tasks for current user
+// @Tags Tasks
+// @Produce json
+// @Success 200 {object} response.SuccessResponse
+// @Failure 401 {object} response.ErrorResponse
+// @Router /api/tasks [get]
 func (ctrl *Controller) GetTasksByUserID(c *fiber.Ctx) error {
 	user := c.Locals("user").(*auth.User)
 
@@ -47,6 +63,14 @@ func (ctrl *Controller) GetTasksByUserID(c *fiber.Ctx) error {
 	})
 }
 
+// @Summary Get task detail
+// @Description Get detail of a task by ID
+// @Tags Tasks
+// @Produce json
+// @Param id path int true "Task ID"
+// @Success 200 {object} response.SuccessResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Router /api/tasks/{id} [get]
 func (ctrl *Controller) GetTaskByID(c *fiber.Ctx) error {
 	user := c.Locals("user").(*auth.User)
 	id := c.Params("id")
@@ -72,6 +96,16 @@ func (ctrl *Controller) GetTaskByID(c *fiber.Ctx) error {
 	})
 }
 
+// @Summary Update task
+// @Description Update a task by ID
+// @Tags Tasks
+// @Accept json
+// @Produce json
+// @Param id path int true "Task ID"
+// @Param data body UpdateRequest true "Task data"
+// @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/tasks/{id} [put]
 func (ctrl *Controller) UpdateTask(c *fiber.Ctx) error {
 	user := c.Locals("user").(*auth.User)
 	id := c.Params("id")
@@ -104,6 +138,14 @@ func (ctrl *Controller) UpdateTask(c *fiber.Ctx) error {
 	})
 }
 
+// @Summary Delete task
+// @Description Delete a task by ID
+// @Tags Tasks
+// @Produce json
+// @Param id path int true "Task ID"
+// @Success 200 {object} response.SuccessResponse
+// @Failure 404 {object} response.ErrorResponse
+// @Router /api/tasks/{id} [delete]
 func (ctrl *Controller) DeleteTask(c *fiber.Ctx) error {
 	user := c.Locals("user").(*auth.User)
 	id := c.Params("id")

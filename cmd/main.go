@@ -10,10 +10,13 @@ import (
 	"rest-api/pkg/config"
 	"rest-api/pkg/middlewares"
 
+	_ "rest-api/docs"
+
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
 	"github.com/gofiber/fiber/v2/middleware/logger"
 	"github.com/gofiber/fiber/v2/middleware/recover"
+	fiberSwagger "github.com/swaggo/fiber-swagger"
 )
 
 func main() {
@@ -56,6 +59,9 @@ func main() {
 			"version": "1.0.0",
 			"timestamp": fiber.Map{},
 		})	})
+
+	// Swagger docs endpoint
+	app.Get("/swagger/*", fiberSwagger.WrapHandler)
 
 	// Use vertical layer routes
 	routes.SetupVerticalRoutes(app, cfg)

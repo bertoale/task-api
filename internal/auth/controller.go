@@ -21,6 +21,15 @@ func NewController(service Service, cfg *config.Config) *Controller {
 	}
 }
 
+// @Summary Login user
+// @Description Login and get JWT token
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param data body LoginRequest true "Login data"
+// @Success 200 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/auth/login [post]
 func (ctrl *Controller) Login(c *fiber.Ctx) error {
 	var req LoginRequest
 
@@ -50,6 +59,15 @@ func (ctrl *Controller) Login(c *fiber.Ctx) error {
 	})
 }
 
+// @Summary Register user
+// @Description Register a new user
+// @Tags Auth
+// @Accept json
+// @Produce json
+// @Param data body RegisterRequest true "User data"
+// @Success 201 {object} response.SuccessResponse
+// @Failure 400 {object} response.ErrorResponse
+// @Router /api/auth/register [post]
 func (ctrl *Controller) Register(c *fiber.Ctx) error {
 	var req RegisterRequest
 
