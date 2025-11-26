@@ -1,11 +1,11 @@
 package routes
 
 import (
-	"rest-api/config"
 	"rest-api/internal/auth"
 	"rest-api/internal/database"
 	"rest-api/internal/task"
 	"rest-api/internal/user"
+	"rest-api/pkg/config"
 
 	"github.com/gofiber/fiber/v2"
 )

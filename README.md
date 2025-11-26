@@ -29,7 +29,12 @@ internal/
   middlewares/  # Middleware global (auth, error handler)
   database/     # Koneksi & migrasi database
   routes/       # Setup routing utama (vertical_routes.go)
-config/         # Konfigurasi aplikasi (env, dsb)
+pkg/
+  config/       # Konfigurasi aplikasi (env, dsb)
+  response/     # Response helper (Success/Error)
+  middlewares/  # Middleware global (auth, error handler)
+
+client/         # Frontend Next.js (app router, shadcn/ui)
 cmd/            # Entry point aplikasi (main.go)
 ```
 
@@ -91,4 +96,3 @@ MIT
 ---
 
 **Happy coding!** 🚀
-# go-event-management

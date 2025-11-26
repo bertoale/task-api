@@ -1,8 +1,10 @@
 package auth
 
 import (
-	"rest-api/config"
+	"rest-api/pkg/config"
 	"time"
+
+	"rest-api/pkg/response"
 
 	"github.com/gofiber/fiber/v2"
 )
@@ -23,17 +25,13 @@ func (ctrl *Controller) Login(c *fiber.Ctx) error {
 	var req LoginRequest
 
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Invalid JSON format",
-		})
+		return response.Error(c, fiber.StatusBadRequest, "Invalid JSON format")
 	}
 
 	// Call service untuk login
 	token, userResponse, err := ctrl.service.Login(req.Email, req.Password)
 	if err != nil {
-		return c.Status(fiber.StatusUnauthorized).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return response.Error(c, fiber.StatusUnauthorized, err.Error())
 	}
 
 	// Set cookie dengan token
@@ -46,10 +44,9 @@ func (ctrl *Controller) Login(c *fiber.Ctx) error {
 		SameSite: "Lax",
 	})
 
-	return c.JSON(fiber.Map{
-		"message": "Login successfully.",
-		"token":   token,
-		"user":    userResponse,
+	return response.Success(c, fiber.StatusOK, "Login successfully.", fiber.Map{
+		"token": token,
+		"user":  userResponse,
 	})
 }
 
@@ -57,21 +54,16 @@ func (ctrl *Controller) Register(c *fiber.Ctx) error {
 	var req RegisterRequest
 
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Invalid JSON format",
-		})
+		return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	// Call service untuk register
 	userResponse, err := ctrl.service.Register(req.Username, req.Email, req.Password)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return response.Error(c, fiber.StatusBadRequest, err.Error())
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"message": "User registered successfully.",
-		"user":    userResponse,
+	return response.Success(c, fiber.StatusCreated, "User registered successfully.", fiber.Map{
+		"user": userResponse,
 	})
 }

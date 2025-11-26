@@ -5,9 +5,9 @@ package middlewares
 import (
 	"strings"
 
-	"rest-api/config"
 	"rest-api/internal/auth"
 	"rest-api/internal/database"
+	"rest-api/pkg/config"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/golang-jwt/jwt/v5"

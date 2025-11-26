@@ -2,7 +2,7 @@ package auth
 
 import (
 	"errors"
-	"rest-api/config"
+	"rest-api/pkg/config"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"

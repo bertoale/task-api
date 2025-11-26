@@ -3,12 +3,12 @@ package main
 import (
 	"fmt"
 	"log"
-	"rest-api/config"
 	"rest-api/internal/auth"
 	"rest-api/internal/database"
-	"rest-api/internal/middlewares"
 	"rest-api/internal/routes"
 	"rest-api/internal/task"
+	"rest-api/pkg/config"
+	"rest-api/pkg/middlewares"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"

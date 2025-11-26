@@ -2,6 +2,7 @@ package user
 
 import (
 	"errors"
+
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
 )

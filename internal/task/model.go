@@ -1,6 +1,9 @@
 package task
 
-import "time"
+import (
+	"rest-api/internal/auth"
+	"time"
+)
 
 type Task struct {
 	ID          uint      `gorm:"primaryKey" json:"id"`
@@ -10,6 +13,8 @@ type Task struct {
 	IsCompleted bool      `gorm:"default:false" json:"isCompleted"`
 	CreatedAt   time.Time `json:"createdAt"`
 	UpdatedAt   time.Time `json:"updatedAt"`
+	
+	User        auth.User `gorm:"foreignKey:UserID"` // relasi ke user
 }
 
 // Request DTOs

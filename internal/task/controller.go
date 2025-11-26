@@ -2,6 +2,7 @@ package task
 
 import (
 	"rest-api/internal/auth"
+	"rest-api/pkg/response"
 	"strconv"
 
 	"github.com/gofiber/fiber/v2"
@@ -20,21 +21,16 @@ func (ctrl *Controller) CreateTask(c *fiber.Ctx) error {
 
 	var req CreateRequest
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Invalid request body",
-		})
+		return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	taskResponse, err := ctrl.service.CreateTask(user.ID, req.Title, req.Description)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return response.Error(c, fiber.StatusBadRequest, err.Error())
 	}
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{
-		"message": "Task created successfully",
-		"task":    taskResponse,
+	return response.Success(c, fiber.StatusCreated, "Task created successfully", fiber.Map{
+		"task": taskResponse,
 	})
 }
 
@@ -43,14 +39,11 @@ func (ctrl *Controller) GetTasksByUserID(c *fiber.Ctx) error {
 
 	tasks, err := ctrl.service.GetTasksByUserID(user.ID)
 	if err != nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return response.Error(c, fiber.StatusInternalServerError, err.Error())
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "Tasks retrieved successfully",
-		"tasks":   tasks,
+	return response.Success(c, fiber.StatusOK, "Tasks retrieved successfully", fiber.Map{
+		"tasks": tasks,
 	})
 }
 
@@ -60,9 +53,7 @@ func (ctrl *Controller) GetTaskByID(c *fiber.Ctx) error {
 
 	taskID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Invalid task ID",
-		})
+		return response.Error(c, fiber.StatusBadRequest, "Invalid task ID")
 	}
 
 	task, err := ctrl.service.GetTaskByID(user.ID, uint(taskID))
@@ -73,14 +64,11 @@ func (ctrl *Controller) GetTaskByID(c *fiber.Ctx) error {
 		} else if err.Error() == "unauthorized to access this task" {
 			statusCode = fiber.StatusForbidden
 		}
-		return c.Status(statusCode).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return response.Error(c, statusCode, err.Error())
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "Task retrieved successfully",
-		"task":    task,
+	return response.Success(c, fiber.StatusOK, "Task retrieved successfully", fiber.Map{
+		"task": task,
 	})
 }
 
@@ -90,16 +78,12 @@ func (ctrl *Controller) UpdateTask(c *fiber.Ctx) error {
 
 	taskID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Invalid task ID",
-		})
+		return response.Error(c, fiber.StatusBadRequest, "Invalid task ID")
 	}
 
 	var req UpdateRequest
 	if err := c.BodyParser(&req); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Invalid request body",
-		})
+		return response.Error(c, fiber.StatusBadRequest, "Invalid request body")
 	}
 
 	updatedTask, err := ctrl.service.UpdateTask(user.ID, uint(taskID), &req)
@@ -112,14 +96,11 @@ func (ctrl *Controller) UpdateTask(c *fiber.Ctx) error {
 		} else if err.Error() == "title is required" {
 			statusCode = fiber.StatusBadRequest
 		}
-		return c.Status(statusCode).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return response.Error(c, statusCode, err.Error())
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "Task updated successfully",
-		"task":    updatedTask,
+	return response.Success(c, fiber.StatusOK, "Task updated successfully", fiber.Map{
+		"task": updatedTask,
 	})
 }
 
@@ -129,9 +110,7 @@ func (ctrl *Controller) DeleteTask(c *fiber.Ctx) error {
 
 	taskID, err := strconv.ParseUint(id, 10, 32)
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{
-			"message": "Invalid task ID",
-		})
+		return response.Error(c, fiber.StatusBadRequest, "Invalid task ID")
 	}
 
 	if err := ctrl.service.DeleteTask(user.ID, uint(taskID)); err != nil {
@@ -141,12 +120,8 @@ func (ctrl *Controller) DeleteTask(c *fiber.Ctx) error {
 		} else if err.Error() == "unauthorized to delete this task" {
 			statusCode = fiber.StatusForbidden
 		}
-		return c.Status(statusCode).JSON(fiber.Map{
-			"message": err.Error(),
-		})
+		return response.Error(c, statusCode, err.Error())
 	}
 
-	return c.JSON(fiber.Map{
-		"message": "Task deleted successfully",
-	})
+	return response.Success(c, fiber.StatusOK, "Task deleted successfully", fiber.Map{})
 }

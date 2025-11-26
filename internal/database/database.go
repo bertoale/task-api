@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"rest-api/config"
+	"rest-api/pkg/config"
 
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"

@@ -1,8 +1,8 @@
 package user
 
 import (
-	"rest-api/config"
-	"rest-api/internal/middlewares"
+	"rest-api/pkg/config"
+	"rest-api/pkg/middlewares"
 
 	"github.com/gofiber/fiber/v2"
 )
