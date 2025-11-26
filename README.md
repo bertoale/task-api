@@ -257,3 +257,7 @@ go test ./...
 MIT
 
 ---
+
+_Frontend API repo: [task-client](https://github.com/bertoale/task-client)_
+
+_This project is part of the GO-TASK fullstack app._
